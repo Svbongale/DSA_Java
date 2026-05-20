@@ -1,8 +1,6 @@
 import java.util.Random;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
-public class Main {
+public class LinearSearch {
     public static void main(String[] args) {
 
         System.out.println("Linear Search");
@@ -20,13 +18,13 @@ public class Main {
         }
         System.out.println("Search Element " + searchElement);
 
-        LinearSearch obj = new LinearSearch();
+        LinearSearchImpl obj = new LinearSearchImpl();
         boolean retVal = obj.searchElement(searchElement, nums);
         System.out.println(retVal);
     }
 }
 
-class LinearSearch {
+class LinearSearchImpl {
     public boolean searchElement(int searchElement, int[] arr) {
            for (int i = 0; i < arr.length; i++) {
                if(arr[i] == searchElement) {
