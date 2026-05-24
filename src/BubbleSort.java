@@ -17,6 +17,7 @@ public class BubbleSort {
 class BubbleSortImpl {
     public void bubbleSort(int[] arr) {
 
+        // In first iteration, the last value in the array will be the largest element
         for (int j = arr.length - 1; j > 0; j--) {
             for (int i = 0; i < j; i++) {
                 int temp = 0;
