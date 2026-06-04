@@ -1,5 +1,3 @@
-import java.util.List;
-
 public class LinkedListFindCycle {
 
     public static void main(String args[]) {
