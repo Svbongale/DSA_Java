@@ -11,7 +11,7 @@ public class FirstNonRepeatingElement {
     public static void main(String[] args) {
         int[] arr = {1,2,4,4,7,1,3,2,3};
 
-        // Key = Digit, Value = Count of Digit
+        // Key = Digit, Value = Count of Digit.
         Map<Integer, Integer> map = new LinkedHashMap<>();
 
         for (int val : arr) {
