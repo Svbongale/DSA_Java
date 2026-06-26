@@ -23,11 +23,21 @@ public class FirstNonRepeatingElement {
             }
         }
 
-
         map.entrySet().forEach(entry -> {
             if (entry.getValue().equals(1)) {
                 System.out.println("Non repeating digit " + entry.getKey());
             }
         });
+
+
+//        Using XOR - More efficient
+
+//        int unique = arr[0];
+//
+//        for (int i = 1; i < arr.length; i++) {
+//            unique = unique ^ arr[i];
+//        }
+//
+//        return; unique;
     }
 }
