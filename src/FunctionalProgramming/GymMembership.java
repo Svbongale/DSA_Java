@@ -22,32 +22,27 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class GymMembership {
 
     public static void main(String[] args) {
 
-        GymMember gymMember1 = new GymMember(1, "Joe", 30, LocalDate.of(2026, 12, 25), MembershipType.GOLD);
-        GymMember gymMember2 = new GymMember(2, "Peter", 32, LocalDate.of(2026, 10, 25), MembershipType.GOLD);
-        GymMember gymMember3 = new GymMember(3, "Sanders", 20, LocalDate.of(2026, 10, 25), MembershipType.SILVER);
-        GymMember gymMember4 = new GymMember(4, "Robert", 23, LocalDate.of(2026, 10, 25), MembershipType.BRONZE);
-        GymMember gymMember5 = new GymMember(5, "Sandy", 17, LocalDate.of(2026, 10, 25), MembershipType.BRONZE);
-
-
-        // Create a list of GymMembers
-        List<GymMember> gymMemberList = new ArrayList<>();
-        gymMemberList.add(gymMember1);
-        gymMemberList.add(gymMember2);
-        gymMemberList.add(gymMember3);
-        gymMemberList.add(gymMember4);
-        gymMemberList.add(gymMember5);
-
-        // Get All member details
         Operations operations = new Operations();
+        operations.initGymMembers();
+        List<GymMember> gymMemberList = operations.getAllGymMemberList();
         operations.printAllMemberDetails(gymMemberList);
         operations.printAverageAgeOfMembers(gymMemberList);
         operations.printAllMembersByMembershipType(gymMemberList);
+
+        // Add new workouts for all Gym members
+        Workout gymWorkout = new Workout(1, WorkoutType.FULL_BODY);
+        operations.doWorkout(gymMemberList.getFirst().memberId, gymWorkout);
+        operations.doWorkout(gymMemberList.getLast().memberId, gymWorkout);
+
+        operations.printAllMemberDetails(gymMemberList);
+
     }
 }
 
@@ -78,6 +73,54 @@ class GymMember {
         this.membershipExpDate = membershipExpDate;
         this.membershipType = membershipType;
     }
+
+    public int getMemberId() {
+        return memberId;
+    }
+
+    public void setMemberId(int memberId) {
+        this.memberId = memberId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public LocalDate getMembershipExpDate() {
+        return membershipExpDate;
+    }
+
+    public void setMembershipExpDate(LocalDate membershipExpDate) {
+        this.membershipExpDate = membershipExpDate;
+    }
+
+    public MembershipType getMembershipType() {
+        return membershipType;
+    }
+
+    public void setMembershipType(MembershipType membershipType) {
+        this.membershipType = membershipType;
+    }
+
+    public Workout getWorkoutRecords() {
+        return workoutRecords;
+    }
+
+    public void setWorkoutRecords(Workout workoutRecords) {
+        this.workoutRecords = workoutRecords;
+    }
 }
 
 class Workout {
@@ -88,13 +131,55 @@ class Workout {
         this.counter = counter;
         this.workoutType = workoutType;
     }
+
+    public int getCounter() {
+        return counter;
+    }
+
+    public void setCounter(int counter) {
+        this.counter = counter;
+    }
+
+    public WorkoutType getWorkoutType() {
+        return workoutType;
+    }
+
+    public void setWorkoutType(WorkoutType workoutType) {
+        this.workoutType = workoutType;
+    }
 }
 
 class Operations {
+
+    List<GymMember> gymMemberList = new ArrayList<>();
+
+    public void initGymMembers() {
+        GymMember gymMember1 = new GymMember(101, "Joe", 30, LocalDate.of(2026, 12, 25), MembershipType.GOLD);
+        GymMember gymMember2 = new GymMember(102, "Peter", 32, LocalDate.of(2026, 10, 25), MembershipType.GOLD);
+        GymMember gymMember3 = new GymMember(103, "Sanders", 20, LocalDate.of(2026, 10, 25), MembershipType.SILVER);
+        GymMember gymMember4 = new GymMember(104, "Robert", 23, LocalDate.of(2026, 10, 25), MembershipType.BRONZE);
+        GymMember gymMember5 = new GymMember(105, "Sandy", 17, LocalDate.of(2026, 10, 25), MembershipType.BRONZE);
+
+
+        // Create a list of GymMembers
+        gymMemberList.add(gymMember1);
+        gymMemberList.add(gymMember2);
+        gymMemberList.add(gymMember3);
+        gymMemberList.add(gymMember4);
+        gymMemberList.add(gymMember5);
+    }
+
+    public List<GymMember> getAllGymMemberList() {
+        return gymMemberList;
+    }
+
     public void printAllMemberDetails(List<GymMember> gymMemberList) {
         System.out.println("Printing all member details: ");
         gymMemberList.forEach(gymMember -> {
-            System.out.println("MemberID -> " + gymMember.memberId +  ", Name -> " + gymMember.name + ", Age -> " + gymMember.age);
+            String workoutDetails = Optional.ofNullable(gymMember.getWorkoutRecords())
+                                    .map(workout -> workout.counter + " for " + workout.workoutType)
+                                    .orElse("No records for workout");
+            System.out.println("MemberID -> " + gymMember.memberId +  ", Name -> " + gymMember.name + ", Age -> " + gymMember.age + ", Workout Details: " + workoutDetails);
         });
     }
 
@@ -117,8 +202,14 @@ class Operations {
                                 )
                         )
                 );
-
         System.out.println("Members grouped by MembershipType -> " + groupedMembers.entrySet());
+    }
+
+    public void doWorkout(int memberId, Workout workout) {
+        gymMemberList.stream()
+                .filter(gymMember -> gymMember.getMemberId() == memberId)
+                .findFirst()
+                .ifPresent(gymMember -> gymMember.setWorkoutRecords(workout));
     }
 }
 
